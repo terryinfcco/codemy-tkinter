@@ -1,4 +1,4 @@
-# import tkinter module
+# import tkinter module as tk
 import Tkinter as tk
   
 # Create a tkinter instance root is customary but can name it anything.
