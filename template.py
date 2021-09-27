@@ -1,5 +1,5 @@
 # import tkinter module as tk
-import Tkinter as tk
+import tkinter as tk
   
 # Create a tkinter instance root is customary but can name it anything.
 root = tk.Tk()
