@@ -9,17 +9,117 @@ import sqlite3
 root = Tk()
     
 # Put a caption or title on our window
-root.title("Message Boxes")
+root.title("Database Application Using Tkinter")
 root.iconphoto(False, PhotoImage(file='TD.png'))
     
 # Set the size of the window
-root.geometry("400x400")
+root.geometry("400x600")
 
 #  Create a database or connect to an existing database - command same either way
 conn = sqlite3.connect('address_book.db')
 
 # Create a cursor - used to talk to the db
 c = conn.cursor()
+
+def update():
+    conn = sqlite3.connect('address_book.db')
+    # Create a cursor - used to talk to the db
+    c = conn.cursor() 
+
+    record_id = delete_box.get()
+    c.execute("""UPDATE addresses SET
+        first_name = :first,
+        last_name = :last,
+        address = :address,
+        city = :city,
+        state = :state,
+        zipcode = :zipcode 
+
+        WHERE oid = :oid""",
+        {'first':f_name_editor.get(),
+        'last':l_name_editor.get(),
+        'address':address_editor.get(),
+        'city':city_editor.get(),
+        'state':state_editor.get(),
+        'zipcode':zipcode_editor.get(),
+        'oid': record_id
+        
+        })
+
+    # after making a change to the database commit it.
+    conn.commit()
+    # Then close the connection
+    conn.close()   
+
+    editor.destroy()
+
+# Create Edit / Update function
+def edit():
+    global editor
+    editor = Tk()
+    # Put a caption or title on our window
+    editor.title("Edit Existing Record")
+    # editor.iconphoto(False, PhotoImage(file='TD.png'))
+    # Set the size of the window
+    editor.geometry("400x300")
+
+    conn = sqlite3.connect('address_book.db')
+    # Create a cursor - used to talk to the db
+    c = conn.cursor()
+    # Get the record that is in delete_box
+    record_id = delete_box.get()
+
+    c.execute("SELECT * FROM addresses WHERE oid =" + record_id)
+    records = c.fetchall() # returns a list of tuples.
+
+    global f_name_editor
+    global l_name_editor
+    global address_editor
+    global city_editor
+    global state_editor
+    global zipcode_editor
+
+    # Create the entry boxes to put the information in
+    f_name_editor = Entry(editor, width=30)
+    f_name_editor.grid(row=0, column=1, padx=20, pady=(10, 0))
+    l_name_editor = Entry(editor, width=30)
+    l_name_editor.grid(row=1, column=1)
+    address_editor = Entry(editor, width=30)
+    address_editor.grid(row=2, column=1)
+    city_editor = Entry(editor, width=30)
+    city_editor.grid(row=3, column=1)
+    state_editor = Entry(editor, width=30)
+    state_editor.grid(row=4, column=1)
+    zipcode_editor = Entry(editor, width=30)
+    zipcode_editor.grid(row=5, column=1)
+
+    # Create labels to go next to the entry boxes
+    f_name_label_editor = Label(editor, text="First Name")
+    f_name_label_editor.grid(row=0, column=0, pady=(10, 0))
+    l_name_label_editor = Label(editor, text="Last Name")
+    l_name_label_editor.grid(row=1, column=0)
+    address_label_editor = Label(editor, text="Address")
+    address_label_editor.grid(row=2, column=0)
+    city_label_editor = Label(editor, text="City")
+    city_label_editor.grid(row=3, column=0)
+    state_label_editor = Label(editor, text="State")
+    state_label_editor.grid(row=4, column=0)
+    zipcode_label_editor = Label(editor, text="ZipCode")
+    zipcode_label_editor.grid(row=5, column=0)
+
+    # Create Save Button to save edited record
+    save_btn_editor = Button(editor, text="Save Record", command=update)
+    save_btn_editor.grid(row=6, column=0, columnspan=2, pady=10, padx=10, ipadx=104)
+
+    # loop through results
+    for record in records:
+        f_name_editor.insert(0,record[0])
+        l_name_editor.insert(0,record[1])
+        address_editor.insert(0,record[2])
+        city_editor.insert(0,record[3])
+        state_editor.insert(0,record[4])
+        zipcode_editor.insert(0,record[5])
+
 
 # Create a delete record function
 def delete():
@@ -88,7 +188,7 @@ def query():
         print_records += f"{record[0]} {record[1]} \t {str(record[6])} \n "
 
     query_label = Label(root, text=print_records) 
-    query_label.grid(row=11, column=0, columnspan=2)
+    query_label.grid(row=12, column=0, columnspan=2)
     # after making a change to the database commit it.
     conn.commit()
     # Then close the connection
@@ -126,7 +226,7 @@ state_label.grid(row=4, column=0)
 zipcode_label = Label(root, text="ZipCode")
 zipcode_label.grid(row=5, column=0)
 
-delete_box_label = Label(root, text="ID To Delete")
+delete_box_label = Label(root, text="Select Record ID")
 delete_box_label.grid(row=9, column=0, pady=5)
 # Create Submit Button
 submit_btn = Button(root, text="Add Record to Database", command=submit)
@@ -139,6 +239,10 @@ query_btn.grid(row=7, column=0, columnspan=2, pady=10, padx=10, ipadx=137)
 # Create a Delete Button
 delete_btn = Button(root, text="Delete Record", command=delete)
 delete_btn.grid(row=10, column=0, columnspan=2, pady=10, padx=10, ipadx=136)
+
+# Create an Update Button
+edit_btn = Button(root, text="Edit Record", command=edit)
+edit_btn.grid(row=11, column=0, columnspan=2, pady=10, padx=10, ipadx=143)
 
 # after making a change to the database commit it.
 conn.commit()
