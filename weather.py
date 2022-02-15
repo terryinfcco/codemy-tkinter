@@ -34,6 +34,7 @@ try:
     
     # Build text for our label
     city = api[0]['ReportingArea']
+    hour = api[0]['HourObserved']
     # print(city)
     qualityo3 = api[0]['AQI']
     categoryo3 = api[0]['Category']['Name'] 
@@ -94,7 +95,7 @@ except Exception as e:
     print (api)
 # We're going to want ReportingArea, AQI, and Category (Category is a dictonary inside a distionary)
 
-cityLabel = Label(root, text="Location: " + city, font=("Helvetica", 20), bg=o3bg )
+cityLabel = Label(root, text="Location: " + city + " Hour: " + str(hour), font=("Helvetica", 20), bg=o3bg )
 # cityLabel.pack(pady=10)
 cityLabel.grid(row=0,column=0, pady=10, padx=10, sticky=W)
 o3Label = Label(root, text=combinedo3, font=("Helvetica", 20), bg=o3bg)
