@@ -1,7 +1,7 @@
 # Import all of tkinter
 from tkinter import *
 
-# Create root window - Main window of your applicaton usually called root, but
+# Create root window - Main window of your application usually called root, but
 # doesn't have to be. Has to be first in program.
 root = Tk()
 

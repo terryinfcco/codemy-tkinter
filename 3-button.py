@@ -15,20 +15,22 @@ def myClick():
 # for parameters. Passing parameters is possible with lambda, but if
 # you put parentheses without lambda it won't work right.
 
-# myButton = Button(root, text="Click Me!", command=myClick)
+myButton = Button(root, text="Click Me!", command=myClick)
 
 # Change the foreground color with fg and background color with bg
 # Can also use hex codes bg="#ffffff" or fg="#000000"
-myButton = Button(root, text="Click Me!", command=myClick, fg="blue", bg="orange")
+myButton4 = Button(root, text="Showing Colors", fg="blue", bg="orange")
 
 # Add padding which is inside the button borders
-# myButton = Button(root, text="Click Me!", padx=50, pady=50)
+myButton2 = Button(root, text="Showing padding", padx=50, pady=50)
 
 # if you want the button grayed out so it can't be clicked:
-# myButton = Button(root, text="Click Me!", state=DISABLED)
+myButton3 = Button(root, text="Showing Disabled", state=DISABLED)
 
 myButton.pack()
-
+myButton2.pack()
+myButton3.pack()
+myButton4.pack()
 
 # Create event loop
 root.mainloop()
